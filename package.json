@@ -1,0 +1,27 @@
+{
+  "name": "assignment4",
+  "version": "1.0.0",
+  "description": "This week assignment has following three tasks:",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index",
+    "start": "node index"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Haren-jft/Employee.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Haren-jft/Employee/issues"
+  },
+  "homepage": "https://github.com/Haren-jft/Employee#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  },
+  "dependencies": {
+    "uuid": "^9.0.0"
+  }
+}
