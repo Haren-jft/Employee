@@ -45,8 +45,52 @@ async function createUser(req,res){
         console.log(error);
     }
 }
+//@desc      update user
+//@route     Put /api/users
+async function updateUser(req,res,id){
+    const user=await User.findById(id);
+    if(!user){
+        res.writeHead(404,{'Content-Type':'application/json'})
+        res.end(JSON.stringify({message:'User Not Found'}))
+    }
+    else{
+        try {
+            let body='';
+            req.on('data',(chunk)=>{
+                body+=chunk;
+            })
+            req.on('end',async()=>{
+                const {name,job,salary}=JSON.parse(body);
+                const user_data={
+                    name:name || user.name,
+                    job:job || user.job,
+                    salary:salary || user.salary 
+                }
+                const updUser=await User.update(id,user_data);
+                res.writeHead(200,{'Content-Type':'application/json'})
+                res.end(JSON.stringify(updUser));
+            })
+        } catch (error) {
+            console.log(error);
+        }    
+    }
+}
+async function deleteUser(req,res,id){
+    try {
+        console.log('demo')
+        console.log(id);
+        await User.remove(id);
+        console.log('demo')
+        res.writeHead(200,{'Content-Type':'application/json'});
+        res.end(JSON.stringify({message:`User ${id} removed`}));
+    } catch (error) {
+        console.log(error);
+    }
+}
 module.exports={
     getUsers,
     getUser,
-    createUser
+    createUser,
+    updateUser,
+    deleteUser
 }

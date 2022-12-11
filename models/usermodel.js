@@ -1,5 +1,5 @@
 //it deals with data
-const db=require('../data/db.json');
+let db=require('../data/db.json');
 const { writeDataToFile }=require('../utilis');
 function findAll(){
     return new Promise((resolve,reject)=>{
@@ -24,8 +24,28 @@ function create(user){
         resolve(newProduct);
     });
 }
+function update(id,user_new){
+    return new Promise((resolve,reject)=>{
+        const index=db.findIndex((emp)=>emp.id==id);
+        db[index].name=user_new.name;
+        db[index].job=user_new.job;
+        db[index].salary=user_new.salary;
+        writeDataToFile('./data/db.json',db);
+        resolve(db[index]);
+    });
+}
+function remove(id){
+    return new Promise((resolve,reject)=>{
+        const index=db.findIndex((emp)=>emp.id==id);
+        db.splice(index,1);
+        writeDataToFile('./data/db.json',db);
+        resolve();
+    });
+}
 module.exports={
     findAll,
     findById,
-    create
+    create,
+    update,
+    remove
 }
