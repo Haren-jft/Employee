@@ -15,39 +15,19 @@ async function getUser(req,res,id){
 }
 //@desc      create user
 async function createUser(req,res){
-    try {
-        let body='';
-        req.on('data',(chunk)=>{
-            body+=chunk;
-        })
-        req.on('end',async()=>{
-            const {name,job,salary}=JSON.parse(body);
-            const user={
-                name,
-                job,
-                salary 
-            }
-            const newUser=await User.create(user);
-            res.json(newUser);
-        })
+    try {    
+        const user=req.body;
+        const newUser=await User.create(user);
+        res.json(newUser);
     } catch (error) {console.log(error);}
 }
 //@desc      update user
 async function updateUser(req,res,id){
     const user=await User.findById(id);
         try {
-            let body='';
-            req.on('data',(chunk)=>body+=chunk)
-            req.on('end',async()=>{
-                const {name,job,salary}=JSON.parse(body);
-                const user_data={
-                    name:name || user.name,
-                    job:job || user.job,
-                    salary:salary || user.salary 
-                }
-                const updUser=await User.update(id,user_data);
-                res.json(updUser);
-            })
+            const user_data=req.body;
+            const updUser=await User.update(id,user_data);
+            res.json(updUser);
         } catch (error) {console.log(error);}    
     }
 async function deleteUser(req,res,id){
