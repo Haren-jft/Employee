@@ -1,7 +1,7 @@
 {
-  "name": "assignment4",
+  "name": "assignment5",
   "version": "1.0.0",
-  "description": "This week assignment has following three tasks:",
+  "description": "Express",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index",
