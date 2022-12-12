@@ -1,17 +1,68 @@
-const express = require('express')
+const express = require('express');
+require('dotenv').config();
 const cors = require('cors');
+const bcrypt=require('bcryptjs');
+const jwt=require('jsonwebtoken');
 const bodyparser=require('body-parser');
 const { getUsers, getUser,createUser,updateUser, deleteUser } = require('./controllers/usercontroller');
-const app = express()
-app.use(cors())
+const app = express();
+app.use(express.json());
+app.use(cors());
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({extended:false}));
 const PORT=process.env.PORT || 3000;
-app.get('/users',(req,res)=>getUsers(req,res));
-app.get('/users/:id',(req,res)=>getUser(req,res,parseInt(req.params.id)));
- app.post('/users',(req,res)=>createUser(req,res));
+let users=[];
+const verifyUserToken=((req,res,next)=>{
+    if(!req.headers.authorization){
+        return res.status(401).send('Unauthorized request');
+    }
+    const token=req.headers['authorization'].split(' ')[1];
+    if(!token){
+        return res.status(401).send('Access denied.No token provided');
+    }
+    try{
+        const decoded=jwt.verify(token,process.env.JWT_SECRET);
+        req.user=decoded.user;
+        next();
+    }catch(err){
+        res.status(400).send('Invalid token');
+    }
+});
+app.post('/api/register',async(req,res)=>{
+    const user=req.body;
+    if(!user.email || !user.password){
+        return res.status(400).send('Username and password are required');
+    }
+    const hash=await bcrypt.hash(user.password,10);
+    user.password=hash;
+    users.push(user);
+    res.json(user);
+});
+//login route
+app.post('/api/login',async(req,res)=>{
+    const user=req.body;
+    //check if user exists
+    const foundUser=users.find((user)=>user.email===req.body.email);
+    console.log(foundUser);
+    if(!foundUser){
+        return res.status(400).send('Invalid email');
+    }
+    //check if password is correct 
+    const isPasswordValid=await bcrypt.compare(user.password,foundUser.password);
+    if(!isPasswordValid){
+        return res.status(400).send('Invalid password');
+    }
+    //create token
+    const token=jwt.sign({user},process.env.JWT_SECRET,{
+        expiresIn:'1h',
+    });
+    res.json({token});
+});
+app.get('/users',verifyUserToken,(req,res)=>getUsers(req,res));
+app.get('/users/:id',verifyUserToken,(req,res)=>getUser(req,res,parseInt(req.params.id)));
+ app.post('/users',verifyUserToken,(req,res)=>createUser(req,res));
 // app.post('/users',createUser);
-app.put('/users/:id',(req,res)=>updateUser(req,res,parseInt(req.params.id)));
-app.delete('/users/:id',(req,res)=>deleteUser(req,res,parseInt(req.params.id)));
+app.put('/users/:id',verifyUserToken,(req,res)=>updateUser(req,res,parseInt(req.params.id)));
+app.delete('/users/:id',verifyUserToken,(req,res)=>deleteUser(req,res,parseInt(req.params.id)));
 app.listen(PORT,()=>{console.log(`Server is running at ${PORT}`)});
 
