@@ -5,11 +5,35 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        body{
+           background-color: cadetblue; 
+        }
+        button{
+            width: 150px;
+            padding: auto;
+            padding-top: 7px;
+            padding-bottom: 7px;
+            background-color: aquamarine;
+            border-radius: 10px;
+        }
+        .container{
+        background-color:burlywood;
+        margin: auto;
+        margin-top: 50px;
+        width: 50%;
+        border: 3px solid black;
+        padding: 20px;
+        text-align: center;
+        }
+    </style>
 </head>
 <body>
-    <h1>Employees</h1>
-    <button id="signup">Signup</button>
-    <button id="login">Login</button>
+    <div class="container">
+    <h1>Employees Portal</h1>
+    <button id="signup">Signup</button><br><br>
+    <button id="login">Login</button><br><br>
+    </div>
     <script>
         document.getElementById("signup").addEventListener('click',()=>{
             location.href='signup.html';

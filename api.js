@@ -1,6 +1,5 @@
 function employees() { 
-  let token=sessionStorage.getItem('token');
-  this.registerUser=(user)=>{
+    this.registerUser=(user)=>{
     const res=$.ajax({
       type:'POST',
       dataType:'json',
@@ -21,7 +20,12 @@ function employees() {
   return token;
   } 
   this.getAll=()=>{
-    const res=$.ajax({
+    let token=sessionStorage.getItem('token');
+    if(!token){
+      throw new Error("SESSION EXPIRED")
+    }
+    else{
+      const res=$.ajax({
         type:'GET',
         headers:{authorization:`Bearer ${token}`},
         dataType:'json',
@@ -29,8 +33,14 @@ function employees() {
         url:'http://localhost:3000/users',
     });
     return res;
+    }
   };
   this.post=(emp)=>{
+    let token=sessionStorage.getItem('token');
+    if(!token){
+      throw new Error("SESSION EXPIRED")
+    }
+    else{    
     const res=$.ajax({
         type:"POST",
         headers:{authorization:`Bearer ${token}`},
@@ -40,8 +50,14 @@ function employees() {
         data: JSON.stringify(emp)
     });
     return res;
+  }
   };
   this.delete=(id)=>{
+    let token=sessionStorage.getItem('token');
+    if(!token){
+      throw new Error("SESSION EXPIRED")
+    }
+    else{
     $.ajax({
         type:"DELETE",
         headers:{authorization:`Bearer ${token}`},
@@ -49,8 +65,14 @@ function employees() {
         contentType:"application/json",
         url:`http://localhost:3000/users/${id}`,
     });
+  }
   };
   this.put=(emp,id)=>{
+    let token=sessionStorage.getItem('token');
+    if(!token){
+      throw new Error("SESSION EXPIRED")
+    }
+    else{
     const res=$.ajax({
         type:"PUT",
         headers:{authorization:`Bearer ${token}`},
@@ -60,5 +82,6 @@ function employees() {
         data:JSON.stringify(emp)
     });
     return res;
+  }
   };
 }
