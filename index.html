@@ -58,9 +58,16 @@
                 <tbody id="tab">
                 </tbody>
             </table>
-        </div>
+        </div><br><br>
+        <button onclick="logout()">LOGOUT</button>
     <script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
     <script src="api.js"></script>
     <script src="app.js"></script>
+    <script>
+        function logout(){
+            sessionStorage.removeItem('token');
+            location.href='home.html';
+        }
+    </script>
 </body>
 </html>

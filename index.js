@@ -1,6 +1,8 @@
 const express = require('express');
 require('dotenv').config();
 const cors = require('cors');
+let users=require('./users.json');
+const { writeDataToFile }=require('./utilis');
 const bcrypt=require('bcryptjs');
 const jwt=require('jsonwebtoken');
 const bodyparser=require('body-parser');
@@ -11,7 +13,6 @@ app.use(cors());
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({extended:false}));
 const PORT=process.env.PORT || 3000;
-let users=[];
 const verifyUserToken=((req,res,next)=>{
     if(!req.headers.authorization){
         return res.status(401).send('Unauthorized request');
@@ -36,6 +37,7 @@ app.post('/api/register',async(req,res)=>{
     const hash=await bcrypt.hash(user.password,10);
     user.password=hash;
     users.push(user);
+    writeDataToFile('./users.json',users);
     res.json(user);
 });
 //login route
