@@ -3,37 +3,46 @@ const User=require('../models/usermodel');
 async function getUsers(req,res){
     try {
         const users=await User.findAll();
-        res.json(users);
+        if(typeof req.session.edit !== 'object'){req.session.edit=false;}
+        res.render('index',{
+            users,
+            edit:req.session.edit
+        })
     } catch (error) {console.log(error);}
 }
 //@desc get single user
 async function getUser(req,res,id){
     try {
         const user=await User.findById(id);
-        res.json(user);
+        // res.json(user);
+        req.session.edit=user;
+        console.log(user, req.session.edit)
+        res.redirect('/users')
     } catch (error) {console.log(error);}
 }
 //@desc      create user
 async function createUser(req,res){
     try {    
+        console.log("Edit se aarha hu");
         const user=req.body;
         const newUser=await User.create(user);
-        res.json(newUser);
+        res.redirect('/users');
     } catch (error) {console.log(error);}
 }
 //@desc      update user
 async function updateUser(req,res,id){
-    const user=await User.findById(id);
+    // const user=await User.findById(id);
         try {
             const user_data=req.body;
             const updUser=await User.update(id,user_data);
-            res.json(updUser);
+            req.session.edit=false;
+            res.redirect('/users');
         } catch (error) {console.log(error);}    
     }
 async function deleteUser(req,res,id){
     try {
         await User.remove(id);
-        res.json({message:`User ${id} removed`})
+        res.redirect('/users');
     } catch (error) {console.log(error);}
 }
 module.exports={

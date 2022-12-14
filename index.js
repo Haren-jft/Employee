@@ -7,8 +7,16 @@ const bcrypt=require('bcryptjs');
 const jwt=require('jsonwebtoken');
 const bodyparser=require('body-parser');
 const { getUsers, getUser,createUser,updateUser, deleteUser } = require('./controllers/usercontroller');
+const session = require('express-session');
 const app = express();
-app.use(express.json());
+app.set('view engine','ejs');
+app.use(express.json())
+app.use(session({
+    secret:'My name is Haren',
+    cookie:{maxAge:60000},
+    resave:false,
+    saveUninitialized:false
+}))
 app.use(cors());
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({extended:false}));
@@ -38,8 +46,14 @@ app.post('/api/register',async(req,res)=>{
     user.password=hash;
     users.push(user);
     writeDataToFile('./users.json',users);
-    res.json(user);
+    res.redirect('/');
 });
+app.get('/login',(req,res)=>{
+    res.render('login');
+})
+app.get('/signup',(req,res)=>{
+    res.render('signup');
+})
 //login route
 app.post('/api/login',async(req,res)=>{
     const user=req.body;
@@ -58,13 +72,17 @@ app.post('/api/login',async(req,res)=>{
     const token=jwt.sign({user},process.env.JWT_SECRET,{
         expiresIn:'1h',
     });
-    res.json({token});
+    // res.json({token});
+    res.redirect('/users');
 });
-app.get('/users',verifyUserToken,(req,res)=>getUsers(req,res));
-app.get('/users/:id',verifyUserToken,(req,res)=>getUser(req,res,parseInt(req.params.id)));
- app.post('/users',verifyUserToken,(req,res)=>createUser(req,res));
+app.get('/',(req,res)=>{
+    res.render('home');
+})
+app.get('/users',(req,res)=>getUsers(req,res));
+app.get('/users/:id',(req,res)=>getUser(req,res,parseInt(req.params.id)));
+ app.post('/users/add',(req,res)=>createUser(req,res));
 // app.post('/users',createUser);
-app.put('/users/:id',verifyUserToken,(req,res)=>updateUser(req,res,parseInt(req.params.id)));
-app.delete('/users/:id',verifyUserToken,(req,res)=>deleteUser(req,res,parseInt(req.params.id)));
+app.post('/users/update/:id',(req,res)=>updateUser(req,res,parseInt(req.params.id)));
+app.post('/users/delete/:id',(req,res)=>deleteUser(req,res,parseInt(req.params.id)));
 app.listen(PORT,()=>{console.log(`Server is running at ${PORT}`)});
 

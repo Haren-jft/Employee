@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Document</title>
+    <style>
+        .container{
+        background-color: aqua;
+        margin: auto;
+        width: 40%;
+        border: 3px solid black;
+        padding: 20px;
+        text-align: center;
+        }
+        table,th,td{
+            border: 2px solid black;
+        }
+        tbody{
+            background-color: bisque;
+        }
+        thead{
+            background-color:  rgb(230, 155, 63);
+            text-align: center;
+            padding: 4px;
+        }
+        .center{
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .btncolor{
+            background-color: bisque
+        }
+    </style>
+</head>
+<body>
+        <div class="container">
+            <form method="post" action=<%= edit === false ? '/users/add' : `/users/update/${edit.id}` %>>
+            <input type="hidden" id="empid"></input>
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" value=<%= edit == false ? "" : `${edit.name}` %>><br><br>                  
+            <label for="job">Job:</label>
+            <input type="text" id="job" name="job" value=<%= edit == false ? "" : `${edit.job}` %>><br><br>
+            <label for="salary">Salary:</label>
+            <input type="text" id="salary" name="salary" value=<%= edit == false ? "" : `${edit.salary}` %>><br><br>
+            <!-- <button class="btncolor" type="submit" id="add" value="Add">Add</button>
+            <button class="btncolor" type="submit" id="upd" value="Update">Update</button><br><br> -->
+            <input id="addbtn" type="submit" value=<%= edit == false ? "Add" : "Update" %>>
+        </form>
+            <table class="center">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Job</th>
+                        <th>Salary</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="tab">
+                    <% for(let i = 0; i<users.length; i++){ %>
+                        <tr>
+                            <td><%= users[i].name %></td>
+                            <td><%= users[i].job %></td>
+                            <td><%= users[i].salary %></td>
+                            <td>
+                                <form action="/users/<%= users[i].id %>"  method="get">
+                                    <input type="submit" value="Edit">
+                                </form>
+                                <form action="/users/delete/<%= users[i].id %>"  method="post">
+                                    <input type="submit" value="Delete">
+                                </form>
+                            </td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+            
+        </div><br><br>
+    <a id="logout" href="home.ejs">Logout</a>
+</body>
+</html>
