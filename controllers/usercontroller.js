@@ -15,7 +15,7 @@ async function getUser(req,res,id){
     try {
         const user=await User.findById(id);
         // res.json(user);
-        req.session.edit=user[0];
+        req.session.edit=user;
         console.log(req.session.edit);
         res.redirect('/users')
     } catch (error) {console.log(error);}
