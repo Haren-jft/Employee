@@ -37,7 +37,7 @@
 </head>
 <body>
         <div class="container">
-            <form method="post" action=<%= edit === false ? '/users/add' : `/users/update/${edit.id}` %>>
+            <form method="post" action=<%= edit === false ? '/users/add' : `/users/update/${edit._id}` %>>
             <input type="hidden" id="empid"></input>
             <label for="name">Name:</label>
             <input type="text" id="name" name="name" value=<%= edit == false ? "" : `${edit.name}` %>><br><br>                  

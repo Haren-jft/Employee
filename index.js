@@ -1,4 +1,6 @@
 const express = require('express');
+const app = express();
+
 require('dotenv').config();
 const cors = require('cors');
 let users=require('./users.json');
@@ -8,7 +10,6 @@ const jwt=require('jsonwebtoken');
 const bodyparser=require('body-parser');
 const { getUsers, getUser,createUser,updateUser, deleteUser } = require('./controllers/usercontroller');
 const session = require('express-session');
-const app = express();
 app.set('view engine','ejs');
 app.use(express.json())
 app.use(session({
@@ -79,10 +80,10 @@ app.get('/',(req,res)=>{
     res.render('home');
 })
 app.get('/users',(req,res)=>getUsers(req,res));
-app.get('/users/:id',(req,res)=>getUser(req,res,parseInt(req.params.id)));
+app.get('/users/:id',(req,res)=>getUser(req,res,req.params.id));
  app.post('/users/add',(req,res)=>createUser(req,res));
 // app.post('/users',createUser);
-app.post('/users/update/:id',(req,res)=>updateUser(req,res,parseInt(req.params.id)));
-app.post('/users/delete/:id',(req,res)=>deleteUser(req,res,parseInt(req.params.id)));
+app.post('/users/update/:id',(req,res)=>updateUser(req,res,req.params.id));
+app.post('/users/delete/:id',(req,res)=>deleteUser(req,res,req.params.id));
 app.listen(PORT,()=>{console.log(`Server is running at ${PORT}`)});
 
