@@ -1,13 +1,36 @@
 const Employees=require('./Employee');
+const Users=require('./Users');
 // Set up mongoose connection
 const mongoose = require("mongoose");
 mongoose.set('strictQuery',false);
 
-const mongoDB = "mongodb+srv://haren:1234@cluster0.hmnyiik.mongodb.net/?retryWrites=true&w=majority";
+const mongoDB = "mongodb+srv://haren:1234@cluster0.r9lqzcq.mongodb.net/emp_db?retryWrites=true&w=majority";
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
+function register(user){
+    return new Promise(async(resolve,reject)=>{
+        try{
+            await Users.create(user);
+            resolve();
+        }
+        catch(err){
+            console.log(err)
+        }
+});
+}
+async function verify(user){
+    return new Promise(async(resolve,reject)=>{
+        try{
+            const res=await Users.findOne({ email: user.email }).exec();
+            resolve(res);
+        }
+        catch(err){
+            console.log(err)
+        }
+});
+}
 function findAll(){
     return new Promise(async(resolve,reject)=>{
         try{
@@ -68,5 +91,7 @@ module.exports={
     findById,
     create,
     update,
-    remove
+    remove,
+    register,
+    verify
 }

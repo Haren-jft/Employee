@@ -45,9 +45,7 @@
             <input type="text" id="job" name="job" value=<%= edit == false ? "" : `${edit.job}` %>><br><br>
             <label for="salary">Salary:</label>
             <input type="text" id="salary" name="salary" value=<%= edit == false ? "" : `${edit.salary}` %>><br><br>
-            <!-- <button class="btncolor" type="submit" id="add" value="Add">Add</button>
-            <button class="btncolor" type="submit" id="upd" value="Update">Update</button><br><br> -->
-            <input id="addbtn" type="submit" value=<%= edit == false ? "Add" : "Update" %>>
+            <input id="addbtn" type="submit" value=<%= edit == false ? "Add" : "Update" %>><br><br>
         </form>
             <table class="center">
                 <thead>
@@ -75,9 +73,10 @@
                         </tr>
                     <% } %>
                 </tbody>
-            </table>
-            
+            </table><br><br>
+            <form action="/api/logout" method="post">
+                <button type="submit">LOGOUT</button>
+            </form>
         </div><br><br>
-    <a id="logout" href="home.ejs">Logout</a>
 </body>
 </html>

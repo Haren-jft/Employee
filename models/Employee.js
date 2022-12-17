@@ -7,4 +7,4 @@ const EmployeeSchema = new Schema({
   job: { type: String, required: true },
   salary: { type: String, required: true }
 });
-module.exports = mongoose.model("Employees", EmployeeSchema);
+module.exports = mongoose.model("emps", EmployeeSchema);
