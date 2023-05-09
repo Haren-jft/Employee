@@ -1,7 +1,5 @@
-//it deals with data
 const mysql=require('mysql');
-// const { writeDataToFile }=require('../utilis');
-//create connection
+
 const dbs=mysql.createConnection({
     host:'localhost',
     user:'root',
@@ -15,7 +13,6 @@ dbs.connect((err)=>{
     }
     console.log('MySql Connected');
 });
-// let db=require('../data/db.json');
 function findAll(){
     return new Promise((resolve,reject)=>{
         let sql='SELECT * FROM Employee';
@@ -45,18 +42,11 @@ function create(user){
 }
 function update(id,user_new){
     return new Promise((resolve,reject)=>{
-        // let post={title:'Updated title',body:'Haren'};
     let sql=`UPDATE Employee SET ? WHERE id=${id}`;
     dbs.query(sql,user_new,(err,result)=>{
         if(err) throw err;
         resolve(result);
     });
-        // const index=db.findIndex((emp)=>emp.id==id);
-        // db[index].name=user_new.name;
-        // db[index].job=user_new.job;
-        // db[index].salary=user_new.salary;
-        // writeDataToFile('./data/db.json',db);
-        // resolve(db[index]);
     });
 }
 function remove(id){
